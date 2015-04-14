@@ -142,11 +142,12 @@ public class TimerAction extends TimerTask{
               
                     shell.text_bri.setText(String.valueOf(res_value.get("brightness")));
                     shell.text_tem.setText(String.valueOf(res_value.get("temperature")));
+                    shell.text_pow.setText(String.valueOf(res_value.get("power")));
                     shell.text_hum.setText(String.valueOf(res_value.get("humidity")));
                     x = (Double) res_value.get("volume");
                     y = (int)(x+0.5);
                     shell.text_vol.setText(String.valueOf(y));
-                    shell.text_pow.setText(String.valueOf(res_value.get("power")));
+
                     shell.text_air.setText(String.valueOf(res_value.get("airquality")));
                     shell.text_season.setText(String.valueOf(res_value.get("season")));
                     shell.text_weather.setText(String.valueOf(res_value.get("weather")));
@@ -168,7 +169,13 @@ public class TimerAction extends TimerTask{
                     showImage("tv.power");
                     //rule
                     String s = String.valueOf(res_value.get("room:rule_id"));
-                    shell.text.setText(s);
+                    String tmp = "Rule_ID:\n";
+                    String[] rule_str = s.split("##");
+                    for(int i=0;i<rule_str.length;i++)
+                    {
+                        tmp = tmp + "           " + rule_str[i] + "\n";
+                        shell.text.setText(tmp);
+                    }
                     System.out.println("RESVALUE-UI:"+res_value);
 
                     //chart

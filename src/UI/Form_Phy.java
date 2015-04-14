@@ -1,16 +1,12 @@
 package UI;
 
-import org.eclipse.swt.widgets.Dialog;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.wb.swt.SWTResourceManager;
+
+import java.io.*;
 
 public class Form_Phy extends Dialog {
 
@@ -21,6 +17,7 @@ public class Form_Phy extends Dialog {
 	private Text text_2;
 	private Text text_3;
 	private Text text_4;
+	private Text text_5;
 
 	/**
 	 * Create the dialog.
@@ -54,12 +51,12 @@ public class Form_Phy extends Dialog {
 	 */
 	private void createContents() {
 		shlFormphy = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		shlFormphy.setSize(516, 300);
-		shlFormphy.setText("Form");
+		shlFormphy.setSize(516, 336);
+		shlFormphy.setText("Env Res");
 		
 		Group grpPhysicResource = new Group(shlFormphy, SWT.NONE);
 		grpPhysicResource.setText("Resource");
-		grpPhysicResource.setBounds(10, 10, 490, 251);
+		grpPhysicResource.setBounds(10, 10, 490, 287);
 		
 		Label lblResName = new Label(grpPhysicResource, SWT.NONE);
 		lblResName.setBounds(10, 30, 71, 17);
@@ -127,36 +124,198 @@ public class Form_Phy extends Dialog {
 		combo_2.setBounds(254, 30, 78, 25);
 		combo_2.select(1);
 
-		Label lblDisplay = new Label(grpPhysicResource, SWT.NONE);
-		lblDisplay.setBounds(199, 33, 49, 17);
-		lblDisplay.setText("Display:");
-
 		Button btnCreate = new Button(grpPhysicResource, SWT.NONE);
-		btnCreate.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(combo_2.getText().equals("Image"))
-				{
-					Shell shell = new Shell();
-					LoadFile lf = new LoadFile(shell,SWT.ALPHA);
-					lf.open();
-				}
-				else
-				{}
-			}
-		});
 		btnCreate.setBounds(35, 217, 80, 27);
 		btnCreate.setText("Create");
-		
+
 		Label lblClass = new Label(grpPhysicResource, SWT.NONE);
-		lblClass.setBounds(344, 33, 136, 17);
+		lblClass.setBounds(344, 33, 33, 17);
 		lblClass.setText("Class:");
-		
-		Combo combo_3 = new Combo(grpPhysicResource, SWT.NONE);
+
+		final Combo combo_3 = new Combo(grpPhysicResource, SWT.NONE);
 		combo_3.setItems(new String[] {"Physical Resource", "Device Resource", "Properties"});
 		combo_3.setBounds(381, 30, 99, 25);
 		combo_3.select(2);
-		
 
+
+		Label lblDisplay = new Label(grpPhysicResource, SWT.NONE);
+		lblDisplay.setBounds(199, 33, 49, 17);
+		lblDisplay.setText("Display:");
+		
+		text_5 = new Text(grpPhysicResource, SWT.BORDER);
+		text_5.setBounds(65, 254, 316, 23);
+		
+		Button btnBrower = new Button(grpPhysicResource, SWT.NONE);
+		btnBrower.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				final String textString;
+				Shell shell = new Shell();
+			    FileDialog dialog = new FileDialog(shell,SWT.OPEN);
+			    dialog.setFilterExtensions(new String[] { "*.jpg", "*.*" });
+			    String name = dialog.open();
+			    if ((name == null) || (name.length() == 0))
+			     return;
+			    try {
+			     File file = new File(name);
+			     FileInputStream stream = new FileInputStream(file.getPath());
+			     text_5.setText(file.getPath());
+			     try {
+			      Reader in = new BufferedReader(new InputStreamReader(
+			        stream));
+			      char[] readBuffer = new char[2048];
+			      StringBuffer buffer = new StringBuffer((int) file
+			        .length());
+			      int n;
+			      while ((n = in.read(readBuffer)) > 0) {
+			       buffer.append(readBuffer, 0, n);
+			      }
+			      textString = buffer.toString();
+			      stream.close();
+			     } catch (IOException e1) {
+			      MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
+			      box.setMessage("Read Error\n" + name);
+			      box.open();
+			      return;
+			     }
+			    } catch (FileNotFoundException e2) {
+			     MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
+			     box.setMessage("Not Found\n" + name);
+			     box.open();
+			     return;
+			    }
+			    //text.setText(textString);
+			}
+		});
+		btnBrower.setBounds(400, 252, 80, 27);
+		btnBrower.setText("Brower");
+		
+		Label lblImage = new Label(grpPhysicResource, SWT.NONE);
+		lblImage.setBounds(10, 256, 49, 17);
+		lblImage.setText("Image:");
+
+		btnCreate.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(combo_3.getText().equals("Device Resource"))
+				{
+					shell.lblAddDevresHere.setVisible(false);
+					Group group = new Group(shell.composite_dev_con, SWT.NONE);
+					group.setBounds(10+shell.col_dev*170, 10+shell.row_dev*190, 150, 179);
+					group.setText(text.getText());
+					group.setLayout(null);
+					if(shell.col_dev<3)
+						shell.col_dev++;
+					else
+					{
+						shell.col_dev=0;
+						shell.row_dev++;
+					}
+					final Button button = new Button(group, SWT.BORDER);
+					button.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							Shell shell = new Shell();
+							LoadFile lf = new LoadFile(shell,SWT.ALPHA);
+							lf.open();
+						}
+					});
+					if(text_5.getText().equals(""))
+						button.setImage(SWTResourceManager.getImage("E:\\MyEclipse\\pfUI\\imagePF\\kaichl.jpg"));
+					else
+						button.setImage(SWTResourceManager.getImage(text_5.getText()));
+					button.setBounds(10, 45, 100, 100);
+
+					/*final Button btnView = new Button(group, SWT.CHECK);
+					btnView.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							if(btnView.getSelection())
+							{
+								button.setEnabled(false);
+							}
+							else
+								button.setEnabled(true);
+						}
+					});
+					btnView.setBounds(10, 21, 98, 18);
+					btnView.setText("View");*/
+
+					Label lblState = new Label(group, SWT.NONE);
+					lblState.setBounds(10, 151, 37, 17);
+					lblState.setText("State:");
+
+					Text txt = new Text(group, SWT.BORDER);
+					if(text_1.getText().equals(""))
+						txt.setText("On");
+					else
+						txt.setText(text_1.getText());
+					txt.setBounds(50, 151, 56, 18);
+				}
+				else if(combo_3.getText().equals("Properties"))
+				{
+					shell.lblAddPropertiesHere.setVisible(false);
+
+					Label lbl = new Label(shell.composite_pro_con, SWT.NONE);
+					lbl.setAlignment(SWT.RIGHT);
+					lbl.setBounds(8, 10+shell.row_pro*35,100, 18);
+					lbl.setText(text.getText()+":");
+
+					Text txt = new Text(shell.composite_pro_con, SWT.BORDER);
+					if(text_1.getText().equals(""))
+						txt.setText("1");
+					else
+						txt.setText(text_1.getText());
+					txt.setBounds(136, 10+shell.row_pro*35, 73, 23);
+
+					shell.row_pro++;
+				}
+				else
+				{
+					shell.lblAddPhyresHere.setVisible(false);
+
+					if(combo_2.getText().equals("TextBar"))
+					{
+						Label lbl = new Label(shell.composite_phy_con, SWT.NONE);
+						lbl.setAlignment(SWT.RIGHT);
+						lbl.setBounds(8, 10 + shell.row_phy * 35, 50, 18);
+						lbl.setText(text.getText() + ":");
+
+						Text txt = new Text(shell.composite_phy_con, SWT.BORDER);
+						if (text_1.getText().equals(""))
+							txt.setText("1");
+						else
+							txt.setText(text_1.getText());
+						txt.setBounds(86, 10 + shell.row_phy * 35, 73, 23);
+
+						shell.row_phy++;
+					}
+					else
+					{
+						Label lbl = new Label(shell.composite_phy_con, SWT.NONE);
+						lbl.setAlignment(SWT.RIGHT);
+						lbl.setBounds(180, 10 + shell.col_phy * 120, 50, 18);
+						lbl.setText(text.getText() + ":");
+
+						final Button button = new Button(shell.composite_phy_con, SWT.BORDER);
+						button.addSelectionListener(new SelectionAdapter() {
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								Shell shell = new Shell();
+								LoadFile lf = new LoadFile(shell,SWT.ALPHA);
+								lf.open();
+							}
+						});
+						if(text_5.getText().equals(""))
+							button.setImage(SWTResourceManager.getImage("E:\\MyEclipse\\pfUI\\imagePF\\kaichl.jpg"));
+						else
+							button.setImage(SWTResourceManager.getImage(text_5.getText()));
+						button.setBounds(258, 10+shell.col_phy * 120, 100, 100);
+
+						shell.col_phy++;
+					}
+				}
+			}
+		});
 	}
 }

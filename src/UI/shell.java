@@ -61,7 +61,7 @@ import org.swtchart.ISeries;
 
 public class shell {
 	//jichen
-	public int flag = 1; 
+	public int flag = 1;
 	public static int testInt = 0;
 	public static Display display;
     public static Timer timer;
@@ -81,13 +81,25 @@ public class shell {
 	private int flag_TV=0;
 	private int flag_blind=0;
 	//
-	
+
+	//enact
+	public static int col_dev = 0;
+	public static int row_dev = 0;
+	public static int col_phy = 0;
+	public static int row_phy = 0;
+	public static int col_pro = 0;
+	public static int row_pro = 0;
+	//
+
 	private ScrolledComposite composite_phy;
-	private Composite composite_phy_con;
+	public static Composite composite_phy_con;
 	private ScrolledComposite composite_pro;
-	private Composite composite_pro_con;
+	public static Composite composite_pro_con;
 	private ScrolledComposite composite_dev;
-	private Composite composite_dev_con;
+	public static Composite composite_dev_con;
+	public static Label lblAddPhyresHere;
+	public static Label lblAddDevresHere;
+	public static Label lblAddPropertiesHere;
 	
 	public static Chart chart;
 	public static final int MARGIN = 5;
@@ -125,7 +137,6 @@ public class shell {
 	public static Button button_4;
 	public static Button button_5;
 	public static Button button_7;
-	public static Button button_8;
 	public static Button button_9;
 	public static Button button_11;
 	public static Button button_12;
@@ -155,7 +166,7 @@ public class shell {
 		createContents();
 		shell.open();
 		shell.layout();
-		client.reset_res_pool();
+		//client.reset_res_pool();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -168,8 +179,8 @@ public class shell {
 	 */
 	protected void createContents() {
 		shell = new Shell(SWT.CLOSE | SWT.MIN | SWT.TITLE);
+		shell.setImage(null);
 		shell.setToolTipText("aaaaa");
-		shell.setImage(SWTResourceManager.getImage("E:\\新建文件夹\\桌面\\aa.jpg"));
 		shell.setSize(1200, 750);
 		shell.setText("SASEP");
 		
@@ -178,7 +189,7 @@ public class shell {
 		composite_phy.setBounds(7, 32, 274, 231);		
 		composite_phy_con = new Composite(composite_phy, SWT.NONE);
 		composite_phy_con.setToolTipText("aaaaaaa");
-		composite_phy_con.setSize(5000, 5000); 
+		composite_phy_con.setSize(500, 5000);
 		
 		final Label lblTime = new Label(composite_phy_con, SWT.NONE);
 		lblTime.setBounds(26, 10, 31, 17);
@@ -237,7 +248,7 @@ public class shell {
 		composite_pro = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		composite_pro.setBounds(287, 32, 269, 231);		
 		composite_pro_con = new Composite(composite_pro, SWT.NONE);
-		composite_pro_con.setSize(5000, 5000); 
+		composite_pro_con.setSize(220, 5000);
 		
 		final Label lblBrightness = new Label(composite_pro_con, SWT.NONE);
 		lblBrightness.setAlignment(SWT.RIGHT);
@@ -297,7 +308,7 @@ public class shell {
 		composite_dev = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		composite_dev.setBounds(10, 291, 557, 400);		
 		composite_dev_con = new Composite(composite_dev, SWT.NONE);
-		composite_dev_con.setSize(5000, 5000); 
+		composite_dev_con.setSize(700, 5000);
 		
 		final Group grpWindow = new Group(composite_dev_con, SWT.NONE);
 		grpWindow.setText("Window");
@@ -330,21 +341,6 @@ public class shell {
 
 		button.setImage(SWTResourceManager.getImage("E:\\MyEclipse\\pfUI\\imagePF\\kaichl.jpg"));
 		button.setBounds(10, 45, 100, 100);
-		
-		final Button btnView = new Button(grpWindow, SWT.CHECK);
-		btnView.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(btnView.getSelection())
-				{
-					button.setEnabled(false);
-				}
-				else
-					button.setEnabled(true);
-			}
-		});
-		btnView.setBounds(10, 21, 98, 18);
-		btnView.setText("View");
 		
 		Label lblState = new Label(grpWindow, SWT.NONE);
 		lblState.setBounds(10, 151, 37, 17);
@@ -386,20 +382,6 @@ public class shell {
 			}
 		});
 		button_2.setBounds(10, 46, 100, 100);
-		final Button button_1 = new Button(grpBlind, SWT.CHECK);
-		button_1.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(button_1.getSelection())
-				{
-					button_2.setEnabled(false);
-				}
-				else
-					button_2.setEnabled(true);
-			}
-		});
-		button_1.setText("View");
-		button_1.setBounds(10, 23, 98, 18);
 		
 		
 		Label label_1 = new Label(grpBlind, SWT.NONE);
@@ -441,20 +423,6 @@ public class shell {
 			}
 		});
 		button_4.setBounds(10, 47, 100, 100);
-		final Button button_3 = new Button(grpLight, SWT.CHECK);
-		button_3.setText("View");
-		button_3.setBounds(10, 23, 98, 18);
-		button_3.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(button_3.getSelection())
-				{
-					button_4.setEnabled(false);
-				}
-				else
-					button_4.setEnabled(true);
-			}
-		});
 		
 		
 		Label label_2 = new Label(grpLight, SWT.NONE);
@@ -495,20 +463,6 @@ public class shell {
 			}
 		});
 		button_5.setBounds(10, 45, 100, 100);
-		final Button button_6 = new Button(grpHeater, SWT.CHECK);
-		button_6.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(button_6.getSelection())
-				{
-					button_5.setEnabled(false);
-				}
-				else
-					button_5.setEnabled(true);
-			}
-		});
-		button_6.setText("View");
-		button_6.setBounds(10, 21, 98, 18);
 
 		
 		Label label_3 = new Label(grpHeater, SWT.NONE);
@@ -549,22 +503,6 @@ public class shell {
 			}
 		});
 		button_7.setBounds(10, 45, 100, 100);
-		
-		
-		button_8 = new Button(grpComputer, SWT.CHECK);
-		button_8.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(button_8.getSelection())
-				{
-					button_7.setEnabled(false);
-				}
-				else
-					button_7.setEnabled(true);
-			}
-		});
-		button_8.setText("View");
-		button_8.setBounds(10, 21, 98, 18);
 		
 		Label label_4 = new Label(grpComputer, SWT.NONE);
 		label_4.setAlignment(SWT.RIGHT);
@@ -623,21 +561,6 @@ public class shell {
 			}
 		});
 		button_9.setBounds(10, 45, 100, 100);
-		
-		final Button button_10 = new Button(grpAircon, SWT.CHECK);
-		button_10.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(button_10.getSelection())
-				{
-					button_9.setEnabled(false);
-				}
-				else
-					button_9.setEnabled(true);
-			}
-		});
-		button_10.setText("View");
-		button_10.setBounds(10, 21, 98, 18);
 		
 		Label label_5 = new Label(grpAircon, SWT.NONE);
 		label_5.setText("State:");
@@ -708,21 +631,6 @@ public class shell {
 		});
 		button_12.setBounds(10, 45, 100, 100);
 		
-		final Button button_13 = new Button(grpTv, SWT.CHECK);
-		button_13.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(button_13.getSelection())
-				{
-					button_12.setEnabled(false);
-				}
-				else
-					button_12.setEnabled(true);
-			}
-		});
-		button_13.setText("View");
-		button_13.setBounds(10, 21, 98, 18);
-		
 		Label label_6 = new Label(grpTv, SWT.NONE);
 		label_6.setText("State:");
 		label_6.setAlignment(SWT.RIGHT);
@@ -774,9 +682,17 @@ public class shell {
 		mntmRes.setText("Create_Resource");
 		
 		new MenuItem(menu_1, SWT.SEPARATOR);
-		final Label lblAddPhyresHere = new Label(composite_phy_con, SWT.NONE);
+		lblAddPhyresHere = new Label(composite_phy_con, SWT.NONE);
 		lblAddPhyresHere.setBounds(10, 10, 137, 17);
 		lblAddPhyresHere.setText("Add Phy_Res Here...");
+
+		lblAddDevresHere = new Label(composite_dev_con, SWT.NONE);
+		lblAddDevresHere.setBounds(10, 10, 137, 17);
+		lblAddDevresHere.setText("Add Dev_Res Here...");
+
+		lblAddPropertiesHere = new Label(composite_pro_con, SWT.NONE);
+		lblAddPropertiesHere.setText("Add Properties Here...");
+		lblAddPropertiesHere.setBounds(10, 10, 137, 17);
 
 		final Label lblOut = new Label(composite_phy_con, SWT.NONE);
 		lblOut.setText("Out_Tem:");
@@ -794,7 +710,7 @@ public class shell {
 		grpTv.setVisible(false);
 		grpWindow.setVisible(false);
 
-		lblTime.setVisible(true);
+		lblTime.setVisible(false);
 		lblSeason.setVisible(false);
 		text_season.setVisible(false);
 		text_time.setVisible(false);
@@ -816,8 +732,14 @@ public class shell {
 		text_hum.setVisible(false);
 		text_pow.setVisible(false);
 		text_tem.setVisible(false);
-		text_vol.setVisible(false);*/
+		text_vol.setVisible(false);
+
+		lblAddPhyresHere.setVisible(true);
+		lblAddDevresHere.setVisible(true);
+		lblAddPropertiesHere.setVisible(true);*/
 		lblAddPhyresHere.setVisible(false);
+		lblAddDevresHere.setVisible(false);
+		lblAddPropertiesHere.setVisible(false);
 		//composite_phy_con.setVisible(false);
 		//composite_pro_con.setVisible(false);
 		//~Sample
@@ -830,6 +752,8 @@ public class shell {
 				{
 					flag_sample=0;
 					lblAddPhyresHere.setVisible(true);
+					lblAddDevresHere.setVisible(true);
+					lblAddPropertiesHere.setVisible(true);
 					lblTime.setVisible(false);
 					lblWeather.setVisible(false);
 					lblSeason.setVisible(false);
@@ -865,6 +789,8 @@ public class shell {
 				{
 					flag_sample=1;
 					lblAddPhyresHere.setVisible(false);
+					lblAddDevresHere.setVisible(false);
+					lblAddPropertiesHere.setVisible(false);
 
 					lblTime.setVisible(true);
 					lblWeather.setVisible(true);
@@ -909,12 +835,41 @@ public class shell {
 		mntmConfig.setMenu(menu_2);
 		
 		MenuItem mntmInitrespool = new MenuItem(menu_2, SWT.NONE);
-		mntmInitrespool.setText("Init_Res_Pool");
+		mntmInitrespool.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Shell shell = new Shell();
+				Form_Specification lf = new Form_Specification(shell,SWT.ALPHA);
+				lf.open();
+			}
+		});
+		mntmInitrespool.setText("Load_Envronment_Specification");
 		
 		new MenuItem(menu_2, SWT.SEPARATOR);
 		
 		MenuItem mntmLoadinitfile = new MenuItem(menu_2, SWT.NONE);
-		mntmLoadinitfile.setText("Load_Init_File");
+		mntmLoadinitfile.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Shell shell = new Shell();
+				Form_Specification lf = new Form_Specification(shell,SWT.ALPHA);
+				lf.open();
+			}
+		});
+		mntmLoadinitfile.setText("Load_Rule_Set");
+		
+		new MenuItem(menu_2, SWT.SEPARATOR);
+		
+		MenuItem mntmLoadgoalspecification = new MenuItem(menu_2, SWT.NONE);
+		mntmLoadgoalspecification.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Shell shell = new Shell();
+				Form_Specification lf = new Form_Specification(shell,SWT.ALPHA);
+				lf.open();
+			}
+		});
+		mntmLoadgoalspecification.setText("Load_Goal_Specification");
 		
 		MenuItem mntmReadMe = new MenuItem(menu, SWT.CASCADE);
 		mntmReadMe.setText("Help");
@@ -965,27 +920,27 @@ public class shell {
 		grpActiverules.setText("Active_Rules");
 		grpActiverules.setBounds(580, 291, 594, 154);
 		
-		text = new Text(grpActiverules, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
+		text = new Text(grpActiverules, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		text.setBounds(10, 23, 574, 121);
 		
-		Group grpSystemclock = new Group(shell, SWT.NONE);
-		grpSystemclock.setText("System_Clock");
+		final Group grpSystemclock = new Group(shell, SWT.NONE);
+		grpSystemclock.setText("System_Control");
 		grpSystemclock.setBounds(932, 451, 242, 240);
 		
 		text_1 = new Text(grpSystemclock, SWT.BORDER);
-		text_1.setBounds(103, 43, 73, 23);
+		text_1.setBounds(103, 26, 73, 23);
 		
 		Label lblNewLabel = new Label(grpSystemclock, SWT.NONE);
-		lblNewLabel.setBounds(27, 46, 61, 17);
+		lblNewLabel.setBounds(27, 29, 61, 17);
 		lblNewLabel.setText("Clock");
 		
 		Label lblStep = new Label(grpSystemclock, SWT.NONE);
-		lblStep.setBounds(27, 85, 61, 17);
+		lblStep.setBounds(27, 58, 61, 17);
 		lblStep.setText("Step");
 		
 		text_2 = new Text(grpSystemclock, SWT.BORDER);
 		text_2.setText("15000");
-		text_2.setBounds(103, 82, 73, 23);
+		text_2.setBounds(103, 55, 73, 23);
 		
 		Button btnNewButton = new Button(grpSystemclock, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
@@ -996,9 +951,10 @@ public class shell {
 //				shell.timer = new java.util.Timer();
 //				TimerAction myTask = new TimerAction();
 //				shell.timer.schedule(myTask, 1000, shell.clock_step);
+				clock_step = Integer.parseInt(text_2.getText());
 			}
 		});
-		btnNewButton.setBounds(206, 80, 26, 27);
+		btnNewButton.setBounds(207, 54, 26, 27);
 		btnNewButton.setText("√");
 		
 		Button btnStartclock = new Button(grpSystemclock, SWT.NONE);
@@ -1006,10 +962,43 @@ public class shell {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//client.reset_res_pool();
+				/*new Thread(new Runnable() {
+					@Override
+					public void run() {
+						ProcessBuilder pb = new ProcessBuilder()
+								.directory(new File("C:\\Users\\admin\\Documents\\GitHub\\AeroAnt\\ResPool"))
+								.command(new String[]{"python", "res_pool.py"});
+						pb.redirectErrorStream(true);
+						try {
+							Process process = pb.start();
+							BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+							String line;
+							while((line = br.readLine())!=null) {System.out.println(line);
+
+								//System.out.flush();
+							}
+							//System.out.print("output:" + process.exitValue());
+
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}).start();
+*/
+
+/*				try {
+					Runtime.getRuntime().exec("cmd.exe /C cd C:\\\\Users\\\\admin\\\\Documents\\\\GitHub\\\\AeroAnt;python init_res.py");
+					//Runtime.getRuntime().exec("C:\\Users\\admin\\Documents\\GitHub\\AeroAnt\\ResPool\\res_pool.py");
+					//Runtime.getRuntime().exec("C:\\Users\\admin\\Documents\\GitHub\\AeroAnt\\test_agent.py");
+					//Runtime.getRuntime().exec("python init_res.py");
+					System.out.print("Fooooooooooooo");
+				} catch (IOException e1) {
+					e1.printStackTrace();System.out.print("shit");
+				}*/
 				startClock(null);
 			}
 		});
-		btnStartclock.setBounds(27, 132, 90, 27);
+		btnStartclock.setBounds(27, 87, 90, 27);
 		btnStartclock.setText("Start_Clock");
 		
 		Button btnStopclock = new Button(grpSystemclock, SWT.NONE);
@@ -1019,7 +1008,7 @@ public class shell {
 				stopClock();
 			}
 		});
-		btnStopclock.setBounds(135, 132, 90, 27);
+		btnStopclock.setBounds(135, 87, 90, 27);
 		btnStopclock.setText("Stop_Clock");
 		
 		Button btnRestartclock = new Button(grpSystemclock, SWT.NONE);
@@ -1029,7 +1018,7 @@ public class shell {
 				startClock(null);
 			}
 		});
-		btnRestartclock.setBounds(27, 182, 90, 27);
+		btnRestartclock.setBounds(27, 120, 90, 27);
 		btnRestartclock.setText("Restart_Clock");
 		
 		Button btnTicktock = new Button(grpSystemclock, SWT.NONE);
@@ -1039,12 +1028,118 @@ public class shell {
 				startClock(clock+1);
 			}
 		});
-		btnTicktock.setBounds(135, 182, 90, 27);
+		btnTicktock.setBounds(135, 120, 90, 27);
 		btnTicktock.setText("Tick_Tock");
 		
 		Label lblMs = new Label(grpSystemclock, SWT.NONE);
-		lblMs.setBounds(181, 85, 18, 18);
+		lblMs.setBounds(182, 59, 18, 18);
 		lblMs.setText("ms");
+		
+		Button btnStartrespool = new Button(grpSystemclock, SWT.NONE);
+		btnStartrespool.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						ProcessBuilder pb = new ProcessBuilder()
+								.directory(new File("C:\\Users\\admin\\Documents\\GitHub\\AeroAnt\\ResPool"))
+								.command(new String[]{"python", "res_pool.py"});
+						pb.redirectErrorStream(true);
+						try {
+							Process process = pb.start();
+							BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+							String line;
+							while((line = br.readLine())!=null) {System.out.println(line);
+
+								//System.out.flush();
+							}
+							//System.out.print("output:" + process.exitValue());
+
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}).start();
+			}
+		});
+		btnStartrespool.setBounds(27, 170, 90, 27);
+		btnStartrespool.setText("Start_ResPool");
+		
+		Button btnStartagent = new Button(grpSystemclock, SWT.NONE);
+		btnStartagent.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						ProcessBuilder pb = new ProcessBuilder()
+								.directory(new File("C:\\Users\\admin\\Documents\\GitHub\\AeroAnt"))
+								.command(new String[]{"python", "test_agent.py"});
+						pb.redirectErrorStream(true);
+						try {
+							Process process = pb.start();
+							BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+							String line;
+							while((line = br.readLine())!=null) {System.out.println(line);
+
+								//System.out.flush();
+							}
+							//System.out.print("output:" + process.exitValue());
+
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}).start();
+			}
+		});
+		btnStartagent.setBounds(135, 170, 90, 27);
+		btnStartagent.setText("Start_Agent");
+		
+		Button btnInitres = new Button(grpSystemclock, SWT.NONE);
+		btnInitres.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						ProcessBuilder pb = new ProcessBuilder()
+								.directory(new File("C:\\Users\\admin\\Documents\\GitHub\\AeroAnt"))
+								.command(new String[]{"python", "init_res.py"});
+						pb.redirectErrorStream(true);
+						try {
+							Process process = pb.start();
+							BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+							String line;
+							while((line = br.readLine())!=null) {System.out.println(line);
+
+								//System.out.flush();
+							}
+							//System.out.print("output:" + process.exitValue());
+
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}).start();
+			}
+		});
+		btnInitres.setBounds(135, 203, 90, 27);
+		btnInitres.setText("Init_Res");
+		
+		Button btnResetrespool = new Button(grpSystemclock, SWT.NONE);
+		btnResetrespool.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				client.reset_res_pool();
+				MessageBox box = new MessageBox(shell, SWT.ICON_INFORMATION);
+				box.setMessage("Reset ResPool Done!");
+				box.open();
+			}
+		});
+		btnResetrespool.setBounds(27, 203, 90, 27);
+		btnResetrespool.setText("Reset_ResPool");
 		
 		Group grpUser = new Group(shell, SWT.NONE);
 		grpUser.setText("User_Preference");
